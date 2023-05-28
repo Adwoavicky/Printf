@@ -1,14 +1,15 @@
 #include "main.h"
 
 /**
- * _printf - function to replicate printf
+ * _printf - function that produces output according to a format
  * @format: format to be printed
- * Return: Printed characters
+ * Return:the nimber of printed characters
  */
 
 int _printf(const char *format, ...)
 {
-	int output_chars;
+	int output_chars = 0;
+	va_list arg_list;
 	conver_t f_list[] = {
 		{"c", print_char},
 		{"s", print_string},
@@ -26,13 +27,25 @@ int _printf(const char *format, ...)
 
 	};
 
-	va_list opt;
-
 	if (format == NULL)
 		return (-1);
-	va_start(opt, format);
-	output_chars = parser(format, f_list, opt);
-	va_end(opt);
 
+	va_start(arg_list, format);
+
+	while (*format)
+	{
+		if (*format == '%')
+		{
+			format++;
+			output_chars += parser(&format, f_list, arg_list);
+		}
+		else
+		{
+			_putchar(*format);
+			output_chars++;
+		}
+		format++;
+	}
+	va_end(arg_list);
 	return (output_chars);
 }
