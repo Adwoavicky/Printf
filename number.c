@@ -67,4 +67,3 @@ int print_unsigned_number(unsigned int n)
 
 	return (s);
 }
-
