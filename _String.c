@@ -13,13 +13,13 @@ int print_reversed(va_list arg)
 	char *p;
 
 
-	s = va_ard(arg, char *);
+	s = va_arg(arg, char *);
 	if (s == NULL)
 		return (-1);
 	p = rev_string(s);
 	if (p == NULL)
 		return (-1);
-	for (len = 0; p[i] != '\0'; i++)
+	for (i = 0; p[i] != '\0'; i++)
 		_putchar(p[i]);
 	free(p);
 	return (i);
@@ -48,7 +48,7 @@ int rot13(va_list list)
 	{
 		for (num = 0; num <= 52; num++)
 		{
-			if (s[i] == x[num])
+			if (s[n] == x[num])
 			{
 				_putchar(u[num]);
 				break;

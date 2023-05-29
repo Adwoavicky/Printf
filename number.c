@@ -1,4 +1,4 @@
-#include "main"
+#include "main.h"
 
 /**
  * print_number - print a number
@@ -29,7 +29,7 @@ int print_number(va_list args)
 		j *= 10;
 	for (; j != 0;)
 	{
-		s += putchar('0' + n / j);
+		s += _putchar('0' + n / j);
 		n %= j;
 		j /= 10;
 	}

@@ -11,10 +11,10 @@
 
 int parser(const char *format, conver_t f_list[], va_list arg_list)
 {
-	int a, b, c, output opt;
+	int a, b, c, u;
 
 
-	output opt = 0;
+	u  = 0;
 
 	for (a = 0; format[a] != '\0'; a++)
 	{
@@ -22,12 +22,12 @@ int parser(const char *format, conver_t f_list[], va_list arg_list)
 		{
 			for (b = 0; f_list[b].sym != NULL; b++)
 			{
-				if (forma[i + 1] == f_list[b].sym[0])
+				if (format[a + 1] == f_list[b].sym[0])
 				{
 					c = f_list[b].f(arg_list);
 					if (c == -1)
 						return (-1);
-					output opt += c;
+					u += c;
 					break;
 				}
 			}
@@ -37,7 +37,7 @@ int parser(const char *format, conver_t f_list[], va_list arg_list)
 				{
 					_putchar(format[a]);
 					_putchar(format[a + 1]);
-					output opt = output opt + 2;
+					u = u + 2;
 				}
 				else
 					return (-1);
@@ -47,8 +47,8 @@ int parser(const char *format, conver_t f_list[], va_list arg_list)
 		else
 		{
 			_putchar(format[a]);
-			output opt++;
+			u++;
 		}
 	}
-	return (output opt);
+	return (u);
 }
