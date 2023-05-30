@@ -1,197 +1,186 @@
 #include "main.h"
-#include <stdio.h>
-
-int hex_check(int, char);
 
 /**
-* print_binary - change numbers in base 10 to binary
-* @list: number of arguments passed
-* Return: lenght of the changed numbers
+* print_char - outputs a char
+* @types: total number of arguments in the function
+* @buffer: a string that handles print
+* @flags: calculates active flags
+* @width: the width of the print
+* @precision: precision specifier
+* @size: size specifier
+* Return: number of chars printed
 */
 
-int print_binary(va_list list)
+int print_char(va_list types, char buffer[], int flags,
+		int width, int precision, int size)
 {
-	unsigned int sum;
-	int k, p;
-	char *str;
-	char *rev_str;
+	char p = va_arg(types, int);
 
-	sum = va_arg(lits, unsigned int);
-	if (sum == 0)
-		return (_putchar('0'));
-	if (sum < 1)
-		return (-1);
-	p = base_len(sum, 2);
-	str = malloc(sizeof(char) * p + 1);
+	return (handle_write_char(p, buffer, flags, width, precision, size));
+}
+
+/**
+* print_string - outputs a string
+* @types: total number of arguments in the function
+* @buffer: a string to handle print
+* @flags: calculates active flags
+* @width: get width
+* @precision: precision specification
+* @size: size specifier
+* Return: number of strings to be printed
+*/
+
+int print_string(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
+{
+	int j = 0, sum;
+	char *str = va_arg(types, char *);
+
+	UNUSED(buffer);
+	UNUSED(flags);
+	UNUSED(width);
+	UNUSED(precision);
+	UNUSED(size);
 	if (str == NULL)
-		return (-1);
-
-	for (k = 0; sum > 0; k++)
 	{
-		if (sum % 2 == 0)
-			str[k] = '0';
-		else
-			str[k] = '1';
-		sum = sum / 2;
+		str = "(null)";
+		if (precision >= 6)
+			str = "  ";
 	}
-	str[k] = '\0';
-	rev_str = rev_string(str);
-	if (rev_str == NULL)
-		return (-1);
-	write_base(rev_str);
-	free(str);
-	free(rev_str);
-	return (p);
-}
 
-/**
-* print_octal - changes a number to the base of octal
-* @list: number of all arguments in the function
-* Return: number of symbols changed
-*/
+	while (str[j] != '\0')
+		j++;
 
-int print_octal(va_list list)
-{
-	unsigned int sum;
-	int u;
-	char *octal;
-	char *rev_str;
-
-	sum = va_arg(list, unsigned int);
-
-	if (sum == 0)
-		return (_putchar('0'));
-	if (sum < 1)
-		return (-1);
-	u = base_len(sum, 8);
-
-	octal = malloc(sizeof(char) * u + 1);
-	if (octal == NULL)
-		return (-1);
-	for (u = 0; sum > 0; u++)
+	if (precision >= 0 && precision < j)
+		j = precision;
+	if (width > j)
 	{
-		octal[u] = (sum %  8) + 48;
-		sum = sum / 8;
-	}
-	octal[u] = '\0';
-	rev_str = rev_string(octal);
-	if (rev_str == NULL)
-		return (-1);
-
-	write_base(rev_str);
-	free(octal);
-	free(rev_str);
-	return (u);
-}
-
-/**
-* print_hex - displays a decimal number of base 18 in lowercase
-* @list: total number of argumeents passed in the function
-* Return: number of characters displayed
-*/
-
-int print_hex(va_list list)
-{
-	unsigned int sum;
-	int p;
-	int h;
-	char *hex;
-	char *rev_hex;
-
-	su = va_arg(list, unsigned int);
-
-	if (sum == 0)
-		return (_putchar('0'));
-	if (sum < 1)
-		return (-1);
-	p = base_len(sum, 16);
-	hex = malloc(sizeof(char) * p + 1);
-	if (hex == NULL)
-		return (-1);
-	for (p = 0; p > 0; p++)
-	{
-		h = sum % 16;
-		if (h > 9)
+		if (flags & F_MINUS)
 		{
-			h = hex_check(rem_num, 'x');
-			hex[p] = h;
+			write(1, &str[0], j);
+			for (sum = width - length; sum > 0; sum--)
+				write(1, " ", 1);
+			return (width);
 		}
 		else
-			hex[p] = h + 48;
-		sum = sum / 16;
-	}
-	hex[p] = '\0';
-	rev_hex = rev_string(hex);
-	if (rev_hex == NULL)
-		return (-1);
-	write_base(rev_hex);
-	free(hex);
-	free(rev_hex);
-	return (p);
-}
-
-/**
-* print_heX - displays a decimal number of base 16
-* @list: total number of arguments in the function
-* Return: number of characters displayed
-*/
-
-int print_heX(va_list list)
-{
-	unsigned int sum;
-	int p;
-	int h;
-	char *hex;
-	char *rev_hex;
-
-	sum = va_arg(list, unsigned int);
-
-	if (sum == 0)
-		return (_putchar('0'));
-	if (sum < 1)
-		return (-1);
-	p = base_len(sum, 16);
-	hex = malloc(sizeof(char) * p + 1);
-	if (hex == NULL)
-		return (-1);
-	for (p = 0; sum > 0; p++)
-	{
-		h = sum % 16;
-		if (h > 9)
 		{
-			h = hex_check(h, 'X');
-			hex[p] = h;
+			for (sum = width - length; sum > 0; sum--)
+				write(1, " ", 1);
+			write(1, &str[0], length);
+			return (width);
 		}
-	else
-		hex[p] = h + 48;
-	sum = sum / 16;
 	}
-	hex[p] = '\0';
-	rev_hex = rev_string(hex);
-	if (rev_hex == NULL)
-		return (-1);
-	write_base(rev_hex);
-	free(hex);
-	free(rev_hex);
-	return (p);
+	return (write(1, str, length));
 }
 
 /**
-* hex_check - assess which hex function is being called
-* @num: numbers to be changed
-* @x: identifies which hex function is being called
-* Return: Ascii value
+* print_percent - outputs a percent sign
+* @types: total number of arguments
+* @buffer: a string that handles print
+* @flags: calculates active flags
+* @width: get width of percent sign
+* @precision: precision specifier
+* @size: size specifier
+* Return: number of chars printed
 */
 
-int hex_check(int num, char x)
+int print_percent(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
 {
-	char *hex = "abcdef";
-	char *Hex = "ABCDEF";
+	UNUSED(types);
+	UNUSED(buffer);
+	UNUSED(flags);
+	UNUSED(width);
+	UNUSED(precision);
+	UNUSED(size);
+	return (write(1, "%%", 1));
+}
 
-	num = num - 10;
-	if (X == 'X')
-		return (hex[num]);
-	else
-		return (Hex[num]);
-	return (0);
+/**
+* print_int - displays an integer
+* @types: total number of arguments
+* @buffer: a string the handles print
+* @flags: calculates active flags
+* @width: get width of an integer
+* @precision: precision specifier
+* @size: size specifier
+* Return: number of chars printed
+*/
+
+int print_int(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
+{
+	int g = BUFF_SIZE - 2;
+	int is_negative = 0;
+	long int m = va_arg(types, long int);
+	unsigned long int sum;
+
+	m = convert_size_number(m, size);
+	if (m == 0)
+		buffer[g--] = '\0';
+
+	buffer[BUFF_SIZE - 1] = '\0';
+	sum = (unsigned long int)m;
+	if (m < 0)
+	{
+		sum = (unsigned long int)((-1) * m);
+		is_negative = 1;
+	}
+
+	while (sum > 0)
+	{
+		buffer[g--] = (sum % 10) + '0';
+		sum /= 10;
+	}
+
+	g++;
+
+	return (write_number(is_negative, g, buffer, flags,
+				width, precision, size));
+}
+
+/**
+* print_binary - displays an unsigned number
+* @types: total number of arguments
+* @buffer: string that handles a print
+* @flags: calculates an active flags
+* @width: get width
+* @precision: precision specifier
+* @size: the size specifier
+* Return: numbers of char printed
+*/
+
+int print_binary(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
+{
+	unsigned int h, f, c, sum;
+	unsigned int a[32];
+	int count;
+
+	UNUSED(buffer);
+	UNUSED(flags);
+	UNUSED(width);
+	UNUSED(precision);
+	UNUSED(size);
+
+	h = va_arg(tpyes, unsigned int);
+	f = 2147483648;
+	a[0] = h / f;
+	for (c = 1; c < 32; c++)
+	{
+		f / 2;
+		a[c] = (h / f) % 2;
+	}
+	for (c = 0, sum = 0, count = 0; c < 32; c++)
+	{
+		sum += a[c];
+		if (sum || c == 31)
+		{
+			char z = '0' + a[c];
+
+			write(1, &z, 1);
+			count++;
+		}
+	}
+	return (count);
 }

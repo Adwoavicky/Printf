@@ -1,40 +1,65 @@
 #include "main.h"
 
+void print_buffer(chr buffer[], int *buff_ind);
+
 /**
- * _printf - function that produces output according to a format
- * @format: format to be printed
- * Return:the nimber of printed characters
- */
+* _printf - displays a function
+* @format: format to be displayed
+* Return: displayed chars
+*/
 
 int _printf(const char *format, ...)
 {
-	int n  = 0;
-	conver_t f_list[] = {
-		{"c", print_char},
-		{"s", print_string},
-		{"%", print_percent},
-		{"d", print_integer},
-		{"u", unsigned_integer},
-		{"i", print_integer},
-		{"b", print_binary},
-		{"r", print_reversed},
-		{"R", rot13},
-		{"o", print_octal},
-		{"x", print_hex},
-		{"X", print_heX},
-		{NULL, NULL}
-
-	};
-
-	va_list arg_list;
+	int k, printed = 0, printed_chars = 0;
+	int flags, width, precision, size, buff_ind = 0;
+	va_list list;
+	char buffer[BUFF_SIZE];
 
 	if (format == NULL)
 		return (-1);
+	va_start(list, format);
 
-	va_start(arg_list, format);
+	for (b = 0; format && format[b] != '\0'; b++)
+	{
+		if (format[b] != '%')
+		{
+			buffer[buff_ind++] = format[b];
+			if (buff_ind == BUFF_SIZE)
+				print_buffer(buffer, &buff_ind);
+			printed_chars++;
+		}
+		else
+		{
+			print_buffer(buffer, &buff_ind);
+			flags = get_flags(format, &b);
+			width = get_width(format, &b, list);
+			precision = get_precision(format, &b, list);
+			size = get_size(format, &b);
+			++b;
+			printed = handle_print(format, &b, list, buffer,
+				flags, width, precision, size);
+			if (printed == -1)
+				return (-1);
+			printed_chars += printed;
+		}
+	}
 
-	n = parser(format, f_list, arg_list);
+	print_buffer(buffer, &buff_ind);
 
-	va_end(arg_list);
-	return (n);
+	va_end(list);
+
+	return (printed_chars);
+}
+
+/**
+* print_buffer - displays the contents of an existing buffer
+* @buffer: string to be displayed
+* @buff_ind: index that represent length
+*/
+
+void print_buffer(char buffer[], int *buff_ind)
+{
+	if (*buff_ind > 0)
+		write(1, &buffer[0], *buff_ind);
+	*buff_ind = 0;
 }
