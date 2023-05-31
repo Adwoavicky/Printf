@@ -7,7 +7,7 @@
 * Return: active flags
 */
 
-int gets_flags(const char *format, int *i)
+int get_flags(const char *format, int *i)
 {
 	int j, rise;
 	int flags = 0;
