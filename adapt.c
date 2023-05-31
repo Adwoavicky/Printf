@@ -58,19 +58,19 @@ int print_string(va_list types, char buffer[],
 		if (flags & F_MINUS)
 		{
 			write(1, &str[0], j);
-			for (sum = width - length; sum > 0; sum--)
+			for (sum = width - j; sum > 0; sum--)
 				write(1, " ", 1);
 			return (width);
 		}
 		else
 		{
-			for (sum = width - length; sum > 0; sum--)
+			for (sum = width - j; sum > 0; sum--)
 				write(1, " ", 1);
-			write(1, &str[0], length);
+			write(1, &str[0], j);
 			return (width);
 		}
 	}
-	return (write(1, str, length));
+	return (write(1, str, j));
 }
 
 /**
@@ -163,12 +163,12 @@ int print_binary(va_list types, char buffer[],
 	UNUSED(precision);
 	UNUSED(size);
 
-	h = va_arg(tpyes, unsigned int);
+	h = va_arg(types, unsigned int);
 	f = 2147483648;
 	a[0] = h / f;
 	for (c = 1; c < 32; c++)
 	{
-		f / 2;
+		f /= 2;
 		a[c] = (h / f) % 2;
 	}
 	for (c = 0, sum = 0, count = 0; c < 32; c++)
