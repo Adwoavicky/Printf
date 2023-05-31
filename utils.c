@@ -37,21 +37,20 @@ int append_hexa_code(char ascii_code, char buffer[], int i)
 }
 
 /**
- * is_digit -verifies if a char is a digit
+ * is_digit - verifies if a char is a digit
  * @c: char to be evaluated
  * Return: 1 if c is a digit, 0 otherwise
  */
 
 int is_digit(char c)
 {
-if (c >= '0' && c <= '9')
-return (1);
-
-return (0);
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
 }
 
 /**
- * convert_size_number -casts a number to the specific size
+ * convert_size_number - casts a number to the specific size
  * @num: number to be casted
  * @size: number indicating the type to be casted
  * Return: casted value of num
