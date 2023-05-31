@@ -213,7 +213,8 @@ int write_pointer(char buffer[], int ind, int length, int width,
 			if (extra_c)
 				buffer[--ind] = extra_c;
 			return (write(1, &buffer[3], i - 3) + write(1, &buffer[ind], length));
-			else if (!(flags & F_MINUS) && padd == '0')
+
+		else if (!(flags & F_MINUS) && padd == '0')
 			{
 				if (extra_c)
 					buffer[--padd_start] = extra_c;
