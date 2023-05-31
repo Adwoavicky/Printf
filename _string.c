@@ -49,8 +49,8 @@ int print_octal(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
 	int g = BUFF_SIZE - 2;
-	unsigned long int num = va_arg(types, unsignrf long int);
-	unsigned long int init_num = nu;
+	unsigned long int num = va_arg(types, unsigned long int);
+	unsigned long int init_num = num;
 
 	UNUSED(width);
 
@@ -141,17 +141,17 @@ int print_hexa(va_list types, char map_to[], char buffer[],
 
 	while (num > 0)
 	{
-		buffer[g--] = map_to[num % 16];
+		buffer[j--] = map_to[num % 16];
 		num /= 16;
 	}
 
 	if (flags & F_HASH && init_num != 0)
 	{
-		buffer[g--] = flag_ch;
-		buffer[g--] = '0';
+		buffer[j--] = flag_ch;
+		buffer[j--] = '0';
 	}
 
-	g++;
+	j++;
 
-	return (write_unsgnd(0, g, buffer, flags, width, precision, size));
+	return (write_unsgnd(0, j, buffer, flags, width, precision, size));
 }

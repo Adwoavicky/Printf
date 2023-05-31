@@ -1,6 +1,6 @@
 #include "main.h"
 /**
-* print_pointer - displays the value of a pointer variable
+*iiiiii print_pointer - displays the value of a pointer variable
 * @types: total number of arguments
 * @buffer: a string to handle print
 * @flags: calculates all active flags
@@ -15,6 +15,7 @@ int print_pointer(va_list types, char buffer[],
 {
 	char more = 0, padd = ' ';
 	int ind = BUFF_SIZE - 2, length = 2, padd_start = 1;
+	unsigned long num_addrs;
 	char map_to[] = "0123456789abcdef";
 	void *addrs = va_arg(types, void *);
 
@@ -61,7 +62,7 @@ int print_pointer(va_list types, char buffer[],
 int print_non_printable(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
-	int k = 0, set = 0;
+	int k = 0, setup = 0;
 	char *str = va_arg(types, char *);
 
 	UNUSED(flags);
@@ -75,15 +76,15 @@ int print_non_printable(va_list types, char buffer[],
 	while (str[k] != '\0')
 	{
 		if (is_printable(str[k]))
-			buffer[k + offset] = str[k];
+			buffer[k + setup] = str[k];
 
 		else
-			offset += append_hexa_code(str[k], buffer, k + offset);
+			setup += append_hexa_code(str[k], buffer, k + setup);
 		k++;
 	}
-	buffer[k + offset] = '\0';
+	buffer[k + setup] = '\0';
 
-	return (write(1, buffer, k + offset));
+	return (write(1, buffer, k + setup));
 }
 
 /**
@@ -114,12 +115,12 @@ int print_reverse(va_list types, char buffer[],
 	{
 		UNUSED(precision);
 
-		str = "(NULL)";
+		str = ")Null(";
 	}
 	for (g = 0; str[g]; g++)
 		;
 
-	for (g = g - 1; g >= o; g--)
+	for (g = g - 1; g >= 0; g--)
 	{
 		char f = str[g];
 
@@ -144,7 +145,7 @@ int print_reverse(va_list types, char buffer[],
 int print_rot13string(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
-	char j;
+	char p;
 	char *str;
 	unsigned int k, m;
 	int count = 0;
@@ -168,20 +169,19 @@ int print_rot13string(va_list types, char buffer[],
 		{
 			if (in[m] == str[k])
 			{
-				x = out[m];
-				write(1, &x, 1);
+				p = out[m];
+				write(1, &p, 1);
 				count++;
 				break;
 			}
 		}
 		if (!in[m])
 		{
-			x = str[k];
-			write(1, &x, !);
+			p = str[k];
+			write(1, &p, 1);
 			count++;
 		}
 	}
 	return (count);
 }
-
 
